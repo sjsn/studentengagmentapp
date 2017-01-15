@@ -22,7 +22,7 @@ def main():
 
 
 ''' THIS STUFF IS USELESS APPARENTLY
->>>>>>> 12952c6c7f7b5f0792f65dad5db5cd8c53eaa8aa
+
 @app.route('/api/createClassroom', methods=['POST'])
 def createClassroom():
     if request.form['teacherID'] is not None and request.form['students'] is not None:
