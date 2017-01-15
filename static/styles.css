@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+
+body, html {
+    font-family: 'Source Sans Pro', Helvetica, sans-serif;
+    height: 100%;
+    width: 100%;
+}
+
+.landing-page {
+    height: 100%;
+    width: 100%;
+}
+
+.landing-top {
+    margin-top: 10%;
+    color: #FFFFFF;
+}
+
+.landing-top h1 {
+    margin-bottom: 5%;
+}
+
+.desc {
+    color: white;
+    text-indent: 50px;
+    margin-bottom: 10%;
+}
+
+.main-title {
+    text-align: center;
+}
+
+.login-btns {
+    text-align: center;
+}
+
+.login-btns button {
+    margin-right: 20px;
+}
+
+.landing-footer {
+    position: absolute;
+    bottom: 0px;
+    height: 10%;
+    width: 100%;
+    text-align: center;
+    color: #FFFFFF;
+}

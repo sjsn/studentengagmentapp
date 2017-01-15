@@ -87,7 +87,11 @@
 	    _createClass(App, [{
 	        key: 'render',
 	        value: function render() {
-	            return _react2.default.createElement(_LandingPage2.default, null);
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(_LandingPage2.default, null)
+	            );
 	        }
 	    }]);
 
@@ -21581,6 +21585,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _LandingButton = __webpack_require__(180);
+
+	var _LandingButton2 = _interopRequireDefault(_LandingButton);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21599,12 +21607,50 @@
 	    }
 
 	    _createClass(LandingPage, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            document.body.style.backgroundImage = 'url(\'/static/background.jpg\')';
+	        }
+	    }, {
+	        key: 'handleClick',
+	        value: function handleClick(type) {
+	            console.log(type);
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
-	                'h1',
-	                null,
-	                'Hello, test'
+	                'div',
+	                { className: 'landing-page' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'container landing-top' },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        { className: 'main-title' },
+	                        'Welcome to [Insert App Name Here]!'
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        { className: 'desc' },
+	                        '[Insert App Name Here] uses your webcam to track student attentiveness and provides a clicker interface to keep students engaged. Using the webcam, we analyze if the students is actively paying attention. If we find that they are not, we send them gentle reminders to tune back in. If enough students are inattentive, we let the teacher know in order so they can regroup the class and keeps their students engaged.'
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'container login-btns' },
+	                        _react2.default.createElement(_LandingButton2.default, { type: 'teacher', onClick: this.handleClick }),
+	                        _react2.default.createElement(_LandingButton2.default, { type: 'student', onClick: this.handleClick })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'landing-footer' },
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'Developed by Team Awesome!'
+	                    )
+	                )
 	            );
 	        }
 	    }]);
@@ -21613,6 +21659,67 @@
 	}(_react2.default.Component);
 
 	exports.default = LandingPage;
+
+/***/ },
+/* 180 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LandingButton = function (_React$Component) {
+	    _inherits(LandingButton, _React$Component);
+
+	    function LandingButton(props) {
+	        _classCallCheck(this, LandingButton);
+
+	        var _this = _possibleConstructorReturn(this, (LandingButton.__proto__ || Object.getPrototypeOf(LandingButton)).call(this, props));
+
+	        if (_this.props.type == "teacher") {
+	            _this.state = { text: "Sign in as Teacher" };
+	        } else {
+	            _this.state = { text: "Sign in as Student" };
+	        }
+	        return _this;
+	    }
+
+	    _createClass(LandingButton, [{
+	        key: "handleClick",
+	        value: function handleClick() {
+	            this.props.onClick(this.props.type);
+	        }
+	    }, {
+	        key: "render",
+	        value: function render() {
+	            return _react2.default.createElement(
+	                "button",
+	                { className: "btn btn-default", onClick: this.handleClick.bind(this) },
+	                this.state.text
+	            );
+	        }
+	    }]);
+
+	    return LandingButton;
+	}(_react2.default.Component);
+
+	exports.default = LandingButton;
 
 /***/ }
 /******/ ]);
