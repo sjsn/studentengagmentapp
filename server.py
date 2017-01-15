@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import requests, json
 import time as _time
-from secrets import emotions_key
+from secret import emotions_key
 import math
 
 app = Flask(__name__)
@@ -19,7 +19,7 @@ def main():
         answer = get(query)
         result = {"query": query, "answer": answer}
     return jsonify(result)
-
+'''
 @app.route('/api/createClassroom', methods=['POST'])
 def createClassroom():
     if request.form['teacherID'] is not None and request.form['students'] is not None:
@@ -28,15 +28,15 @@ def createClassroom():
         result = {"classID": classID, "numbers": numbers}
     return jsonify(result)
 
-#@app.route('/api/studentLogIn', methods = ['POST'])
-#def studentLogIn():
+@app.route('/api/studentLogIn', methods = ['POST'])
+def studentLogIn():
 
-#@app.route('/api/teacherLogIn', method = ['POST'])
-#def teacherLogIn():
+@app.route('/api/teacherLogIn', method = ['POST'])
+def teacherLogIn():
+'''
 def getClassID():
     uniqueNumRaw = _time.time()
     print("uniqueNumRaw: ", uniqueNumRaw)
-    #math.floor(uniqueNumRaw / 10000)*10000
     uniqueNum = math.floor(10000*((uniqueNumRaw/10000)-math.floor(uniqueNumRaw/10000)))
     print("uniqueNum: ", uniqueNum)
 
@@ -70,7 +70,6 @@ def getInattentive(emotion_list): # I think emotions is a dictionary?
         print("You are inattentive")
 
         return (result < threshold)
-
 
     #happinessScore = emotion_list[0]['scores']['happiness']
 
