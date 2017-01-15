@@ -2,8 +2,24 @@
 <html>
 <head>
     <title>Student Engagement App</title>
+    <script src="https://www.gstatic.com/firebasejs/3.6.5/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyAsVDXadXIqPdYRyl62CMXg1l2HE_TqIjA",
+        authDomain: "defhacks-sea.firebaseapp.com",
+        databaseURL: "https://defhacks-sea.firebaseio.com",
+        storageBucket: "defhacks-sea.appspot.com",
+        messagingSenderId: "221838530363"
+      };
+      firebase.initializeApp(config);
+    </script>
+    <link rel="stylesheet" type="text/css" href="static/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="static/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="static/styles.css" />
 </head>
 <body>
-    <p>Hello guys! Let's do this!</p>
+    <div id="content"></div>
+	<script type="text/javascript" src="static/dist/bundle.js"></script>
 </body>
 </html>

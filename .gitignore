@@ -8,6 +8,9 @@ secrets.py
 
 secret.py
 
-*.pyc
+node_modules
 
-__pycache__
+bundle.js
+static/dist/bundle.js
+
+secrets.js
