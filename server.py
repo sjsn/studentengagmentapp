@@ -1,14 +1,14 @@
 from flask import Flask, render_template, request, jsonify
 import requests, json
 import time as _time
-from secret import emotions_key
+from secrets import emotions_key
 import math
 
 app = Flask(__name__)
 
 ms_emotion_url = 'https://api.projectoxford.ai/emotion/v1.0/recognize'
 
-test_img = 'http://legacy.lincolninteractive.org/images/default-album/bored-with-school-(via-salon.com).jpg?sfvrsn=2'
+test_img = 'https://image.freepik.com/free-photo/three-bored-business-people-analyzing-graph_1262-2050.jpg'
 #'https://larrycuban.files.wordpress.com/2015/11/enhanced-buzz-wide-4644-1444018953-9.jpg'
 
 
@@ -85,14 +85,15 @@ def getEmotions():
     emotion_list = response.json()
 
     pretty = json.dumps(response.json(), sort_keys=True, indent=4, separators=(',', ':'))
-    print(emotion_list)
-    print (pretty)
+    #print (pretty)
 
     return emotion_list
 
 def getInattentive(emotion_list): # returns a boolean indicating innatention (True means student is disengaged)
-    threshold = .5 # negative emotion summation above this indicates innatention
+    threshold = .7 # negative emotion summation above this indicates innatention
     del emotion_list[0]['scores']["neutral"] # delete the "neutral" key-value pairing
+    pretty = json.dumps(emotion_list, sort_keys=True, indent=4, separators=(',', ':'))
+    print (pretty)
 
     listTotal = 0
     negativeEmotionTotal = 0;
