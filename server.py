@@ -31,22 +31,23 @@ def getEmotions():
     pretty = json.dumps(response.json(), sort_keys=True, indent=4, separators=(',', ':'))
     print(emotion_list)
     print (pretty)
+
     return emotion_list
 
 
-def getInattentive(emotion_list):
-    # Get innattentive
-    print("emotionlist type: ")
-    print type(emotion_list)
+def getInattentive(emotion_list): # I think emotions is a dictionary?
+    threshold = .5 # negative emotion summation above this indicates innatention
 
-    print("emotionlist(0) is: ")
-    print emotion_list[0]
-    thresh = 0
+    result = 0
+    for str in {"anger", "contempt", "disgust", "fear"}:
+        temp = emotion_list[0]['scores'][str]
+        result += temp
+    if (result < threshold):
+        print("You are attentive")
+    else:
+        print("You are inattentive")
 
-    for scores in range(0,3):
-            if emotion_list[0]['scores'][scores] > 0.5:
-                thresh += scores
-            print "You are innattentive"
+
     #happinessScore = emotion_list[0]['scores']['happiness']
 
     #print("happinessScore")
@@ -55,6 +56,7 @@ def getInattentive(emotion_list):
 
     #if happinessScore < 1:
     #    print "You are innattentive"
+
 
 
 
