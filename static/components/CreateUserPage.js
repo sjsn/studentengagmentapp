@@ -7,10 +7,8 @@ export default class CreateUserPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {email: "", password: "", role: "student", fName: "", lName: ""};
-    }
-
-    componentWillMount() {
         document.body.style.backgroundImage = '';
+
     }
 
     handleEmailChange(newEmail) {

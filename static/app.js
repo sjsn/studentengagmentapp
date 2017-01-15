@@ -6,7 +6,13 @@ import LandingPage from './components/LandingPage';
 import LoginPage from './components/LoginPage';
 import CreateUserPage from './components/CreateUserPage';
 import StudentPage from './components/StudentPage';
+import StudentList from './components/StudentList';
+import StudentView from './components/StudentView';
 import TeacherPage from './components/TeacherPage';
+import TeacherList from './components/TeacherList';
+import TeacherView from './components/TeacherView';
+import CreateClassPage from './components/CreateClassPage';
+import JoinClassPage from './components/JoinClassPage';
 import NoMatch from './components/NoMatch';
 import auth from './components/auth';
 
@@ -58,8 +64,18 @@ ReactDOM.render((
             <IndexRoute component={LandingPage}/>
             <Route path="login" component={LoginPage}/>
             <Route path="newuser" component={CreateUserPage}/>
-            <Route path="students" component={StudentPage} onEnter={requireAuth}/>
-            <Route path="teachers" component={TeacherPage} onEnter={requireAuth}/>
+            <Route path="students" component={StudentPage} onEnter={requireAuth}>
+                <Route path=":uid" component={StudentList} onEnter={requireAuth}>
+                    <Route path="join" component={JoinClassPage} onEnter={requireAuth}/>
+                    <Route path=":classId" component={StudentView} onEnter={requireAuth}/>
+                </Route>
+            </Route>
+            <Route path="teachers" component={TeacherPage} onEnter={requireAuth}>
+                <Route path=":uid" component={TeacherList} onEnter={requireAuth}>
+                    <Route path="create" component={CreateClassPage} onEnter={requireAuth}/>
+                    <Route path=":classId" component={TeacherView} onEnter={requireAuth}/>
+                </Route>
+            </Route>
             <Route path="*" component={NoMatch}/>
         </Route>
     </Router>

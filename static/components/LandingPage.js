@@ -4,12 +4,9 @@ import { Link, browserHistory } from 'react-router';
 export default class LandingPage extends React.Component {
     constructor(props) {
         super(props);
-    }
-
-    componentWillMount() {
         document.body.style.backgroundImage = 'url(\'/static/background.jpg\')';
     }
-
+    
     render() {
         return (
             <div className="landing-page">

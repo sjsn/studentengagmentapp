@@ -8,9 +8,6 @@ export default class LoginPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {email: "", password: ""};
-    }
-
-    componentWillMount() {
         document.body.style.backgroundImage = '';
     }
 
@@ -36,12 +33,13 @@ export default class LoginPage extends React.Component {
             return firebase.auth().currentUser.uid;
         })
         .then((uid) => {
+            this.setState({uid: uid});
             return firebase.database().ref().child('user/' + uid).once('value');
         })
         .then((result) => {
             var teacher = result.val().teacher;
             var role = teacher ? 'teachers' : 'students';
-            browserHistory.push('/' + role);
+            browserHistory.push('/' + role + '/' + this.state.uid);
         })
         .catch(function(error) {
             // Handle Errors here.

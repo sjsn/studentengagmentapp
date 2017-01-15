@@ -7,9 +7,6 @@ export default class StudentPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {img: ""};
-    }
-
-    componentWillMount() {
         document.body.style.backgroundImage = '';
     }
 
