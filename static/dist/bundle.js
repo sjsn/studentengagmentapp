@@ -105,15 +105,11 @@
 
 	var _CreateClassPage2 = _interopRequireDefault(_CreateClassPage);
 
-	var _JoinClassPage = __webpack_require__(249);
-
-	var _JoinClassPage2 = _interopRequireDefault(_JoinClassPage);
-
-	var _NoMatch = __webpack_require__(250);
+	var _NoMatch = __webpack_require__(249);
 
 	var _NoMatch2 = _interopRequireDefault(_NoMatch);
 
-	var _auth = __webpack_require__(251);
+	var _auth = __webpack_require__(250);
 
 	var _auth2 = _interopRequireDefault(_auth);
 
@@ -194,7 +190,6 @@
 	            _reactRouter.Route,
 	            { path: 'students', component: _StudentPage2.default, onEnter: requireAuth },
 	            _react2.default.createElement(_reactRouter.Route, { path: ':uid', component: _StudentList2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: ':uid/join', component: _JoinClassPage2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: ':uid/:classId', component: _StudentView2.default })
 	        ),
 	        _react2.default.createElement(
@@ -37714,7 +37709,7 @@
 
 	        var _this = _possibleConstructorReturn(this, (StudentView.__proto__ || Object.getPrototypeOf(StudentView)).call(this, props));
 
-	        _this.state = { img: "" };
+	        _this.state = { img: "", "uid": _this.props.params.uid };
 	        document.body.style.backgroundImage = '';
 	        return _this;
 	    }
@@ -37722,6 +37717,8 @@
 	    _createClass(StudentView, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
+	            var _this2 = this;
+
 	            var canvas = document.querySelector('canvas');
 	            var brush = canvas.getContext('2d');
 	            var vid;
@@ -37736,12 +37733,20 @@
 	            });
 	            // Retake picture every 1 minute & send to backend
 	            setInterval(function () {
-	                canvas.width = video.clientWidth;
-	                canvas.height = video.clientHeight;
-	                brush.drawImage(video, 0, 0);
-	                var drawMask = document.getElementById('mask');
-	                brush.drawImage(drawMask, 75, 25);
-	            }, 60 * 10000);
+	                canvas.width = vid.clientWidth;
+	                canvas.height = vid.clientHeight;
+	                brush.drawImage(vid, 0, 0);
+	                canvas.toBlob(function (blob) {
+	                    var image = new Image();
+	                    image.src = blob;
+	                    var storeImg = firebase.storage().ref().child('images/' + _this2.state.uid).put(blob).then(function () {
+	                        // Then gets the URL of that new image
+	                        return firebase.storage().ref().child("images/" + _this2.state.uid).getDownloadURL();
+	                    }).then(function (url) {
+	                        console.log(url);
+	                    });
+	                });
+	            }, 10000);
 	        }
 	    }, {
 	        key: 'render',
@@ -38287,51 +38292,6 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var JoinClass = function (_React$Component) {
-	    _inherits(JoinClass, _React$Component);
-
-	    function JoinClass() {
-	        _classCallCheck(this, JoinClass);
-
-	        return _possibleConstructorReturn(this, (JoinClass.__proto__ || Object.getPrototypeOf(JoinClass)).apply(this, arguments));
-	    }
-
-	    _createClass(JoinClass, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement('div', null);
-	        }
-	    }]);
-
-	    return JoinClass;
-	}(_react2.default.Component);
-
-	exports.default = JoinClass;
-
-/***/ },
-/* 250 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 	var NoMatch = function (_React$Component) {
 	    _inherits(NoMatch, _React$Component);
 
@@ -38358,7 +38318,7 @@
 	exports.default = NoMatch;
 
 /***/ },
-/* 251 */
+/* 250 */
 /***/ function(module, exports) {
 
 	"use strict";

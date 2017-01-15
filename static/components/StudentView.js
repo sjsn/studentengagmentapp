@@ -6,7 +6,7 @@ import secrets from './secrets';
 export default class StudentView extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {img: ""};
+        this.state = {img: "", "uid": this.props.params.uid};
         document.body.style.backgroundImage = '';
     }
 
@@ -29,12 +29,23 @@ export default class StudentView extends React.Component {
         );
         // Retake picture every 1 minute & send to backend
         setInterval(() => {
-			canvas.width = video.clientWidth;
-			canvas.height = video.clientHeight;
-			brush.drawImage(video, 0, 0);
-			var drawMask = document.getElementById('mask');
-			brush.drawImage(drawMask, 75, 25);
-		}, 60*10000);
+			canvas.width = vid.clientWidth;
+			canvas.height = vid.clientHeight;
+			brush.drawImage(vid, 0, 0);
+            canvas.toBlob((blob) => {
+                var image = new Image();
+                image.src = blob;
+                var storeImg = firebase.storage().ref().child('images/' + this.state.uid)
+                .put(blob)
+                .then(() => {
+    			    // Then gets the URL of that new image
+    			    return firebase.storage().ref().child("images/" + this.state.uid).getDownloadURL();
+    			})
+                .then((url) => {
+    				console.log(url);
+                });
+            });
+		}, 5000);
     }
 
     render() {

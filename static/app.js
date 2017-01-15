@@ -12,7 +12,6 @@ import TeacherPage from './components/TeacherPage';
 import TeacherList from './components/TeacherList';
 import TeacherView from './components/TeacherView';
 import CreateClassPage from './components/CreateClassPage';
-import JoinClassPage from './components/JoinClassPage';
 import NoMatch from './components/NoMatch';
 import auth from './components/auth';
 
@@ -66,7 +65,6 @@ ReactDOM.render((
             <Route path="newuser" component={CreateUserPage}/>
             <Route path="students" component={StudentPage} onEnter={requireAuth}>
                 <Route path=":uid" component={StudentList}/>
-                <Route path=":uid/join" component={JoinClassPage}/>
                 <Route path=":uid/:classId" component={StudentView}/>
             </Route>
             <Route path="teachers" component={TeacherPage} onEnter={requireAuth}>
