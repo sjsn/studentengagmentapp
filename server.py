@@ -34,23 +34,19 @@ def getEmotions():
     return emotion_list
 
 
-def getInattentive(emotions): # I think emotions is a dictionary?
-    # Get innattentive
+def getInattentive(emotion_list): # I think emotions is a dictionary?
+    threshold = .5 # negative emotion summation above this indicates innatention
 
-    print("emotionlist type: ")
-    print type(emotion_list)
+    result = 0
+    for str in {"anger", "contempt", "disgust", "fear"}:
+        temp = emotion_list[0]['scores'][str]
+        result += temp
+    if (result < threshold):
+        print("You are attentive")
+    else:
+        print("You are inattentive")
 
-    print("emotionlist(0) is: ")
-    print emotion_list[0]
 
-
-    happinessScore = emotion_list[0]['scores']['happiness']
-    #print("happinessScore")
-
-    #print type(happinessScore)
-
-    if happinessScore < 1:
-        print "You are innattentive"
 
 # if __name__ == '__main__':
 #     app.run()
