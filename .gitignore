@@ -7,4 +7,6 @@ secrets.py
 
 secret.py
 
+*.pyc
+
 __pycache__

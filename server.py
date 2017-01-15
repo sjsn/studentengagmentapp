@@ -26,28 +26,36 @@ def getEmotions():
     headers['Ocp-Apim-Subscription-Key'] = emotions_key
     headers['Content-Type'] = 'application/json'
     data = None
-    emotion_list = response.json()
     response = requests.request('POST', ms_emotion_url, json=params, data=None, headers=headers, params=None)
     emotion_list = response.json()
     pretty = json.dumps(response.json(), sort_keys=True, indent=4, separators=(',', ':'))
     print(emotion_list)
     print (pretty)
+    return emotion_list
 
 
 def getInattentive(emotion_list):
     # Get innattentive
-    if emotion_list[0]['score']['neutral'] < 0.7:
+    print("emotionlist type: ")
+    print type(emotion_list)
+
+    print("emotionlist(0) is: ")
+    print emotion_list[0]
+
+
+    happinessScore = emotion_list[0]['scores']['happiness']
+    #print("happinessScore")
+
+    #print type(happinessScore)
+
+    if happinessScore < 1:
         print "You are innattentive"
-    return getEmotions
+
 
 
 # if __name__ == '__main__':
 #     app.run()
+emotions = getEmotions()
+getInattentive(emotions)
 
-
-getEmotions()
-
-getInattentive('neutral')
-
-#emotions = getEmotions()
 # getInattentive(emotions) is this what we want??
