@@ -8,13 +8,9 @@ ms_emotion_url = 'https://api.projectoxford.ai/emotion/v1.0/recognize'
 
 test_img = 'https://larrycuban.files.wordpress.com/2015/11/enhanced-buzz-wide-4644-1444018953-9.jpg'
 
-@app.route('/api/question', methods=['GET'])
+@app.route('/', methods=['GET', 'POST'])
 def main():
-    if request.form['query'] is not None:
-        query = request.form['query']
-        answer = get(query)
-        result = {"query": query, "answer": answer}
-    return jsonify(result)
+    return render_template('index.html')
 
 def getEmotions():
     params = {
@@ -33,7 +29,7 @@ def getInattentive(emotions):
     return emotions
 
 
-# if __name__ == '__main__':
-#     app.run()
+if __name__ == '__main__':
+    app.run()
 
-getEmotions()
+# getEmotions()

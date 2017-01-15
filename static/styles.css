@@ -4,11 +4,13 @@ body, html {
     font-family: 'Source Sans Pro', Helvetica, sans-serif;
     height: 100%;
     width: 100%;
+    overflow-x: hidden;
 }
 
 .landing-page {
     height: 100%;
     width: 100%;
+    overflow-y: hidden;
 }
 
 .landing-top {
@@ -45,4 +47,13 @@ body, html {
     width: 100%;
     text-align: center;
     color: #FFFFFF;
+}
+
+.user-form {
+    text-align: center;
+    margin-top: 20%;
+}
+
+.hidden {
+    display: none;
 }

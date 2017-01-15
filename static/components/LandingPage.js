@@ -1,14 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 import LandingButton from './LandingButton';
 
 export default class LandingPage extends React.Component {
-    componentWillMount() {
-        document.body.style.backgroundImage = 'url(\'/static/background.jpg\')';
+    constructor(props) {
+        super(props);
     }
 
-    handleClick(type) {
-        console.log(type);
+    componentWillMount() {
+        document.body.style.backgroundImage = 'url(\'/static/background.jpg\')';
     }
 
     render() {
@@ -24,8 +25,8 @@ export default class LandingPage extends React.Component {
                         they can regroup the class and keeps their students engaged.
                     </p>
                     <div className="container login-btns">
-                        <LandingButton type="student" onClick={this.handleClick} />
-                        <LandingButton type="teacher" onClick={this.handleClick} />
+                        <Link to="/students"><LandingButton type="student" /></Link>
+                        <Link to="/teachers"><LandingButton type="teacher" /></Link>
                     </div>
                 </div>
                 <div className="landing-footer">

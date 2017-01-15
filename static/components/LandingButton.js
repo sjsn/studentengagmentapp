@@ -10,11 +10,7 @@ export default class LandingButton extends React.Component {
         }
     }
 
-    handleClick() {
-        this.props.onClick(this.props.type);
-    }
-
     render() {
-        return (<button className="btn btn-default" onClick={this.handleClick.bind(this)}>{this.state.text}</button>);
+        return (<button className="btn btn-default">{this.state.text}</button>);
     }
 }
