@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 import requests, json
 import time as _time
-from secret import emotions_key
+from secrets import emotions_key
+import math
 
 app = Flask(__name__)
 
@@ -23,16 +24,21 @@ def main():
 def createClassroom():
     if request.form['teacherID'] is not None and request.form['students'] is not None:
         createClassroom = request.form['classID']
-        numbers = get(classID)
+        numbers = getClassID()
         result = {"classID": classID, "numbers": numbers}
-    return jsonify(numbers)       
+    return jsonify(result)
 
 #@app.route('/api/studentLogIn', methods = ['POST'])
 #def studentLogIn():
 
 #@app.route('/api/teacherLogIn', method = ['POST'])
 #def teacherLogIn():
-
+def getClassID():
+    uniqueNumRaw = _time.time()
+    print("uniqueNumRaw: ", uniqueNumRaw)
+    #math.floor(uniqueNumRaw / 10000)*10000
+    uniqueNum = math.floor(10000*((uniqueNumRaw/10000)-math.floor(uniqueNumRaw/10000)))
+    print("uniqueNum: ", uniqueNum)
 
 def getEmotions():
     params = {
@@ -83,5 +89,6 @@ def getInattentive(emotion_list): # I think emotions is a dictionary?
 #     app.run()
 emotions = getEmotions()
 getInattentive(emotions)
+getClassID()
 
 # getInattentive(emotions) is this what we want??
