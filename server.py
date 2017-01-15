@@ -47,6 +47,18 @@ def getInattentive(emotion_list): # I think emotions is a dictionary?
     else:
         print("You are inattentive")
 
+        return (result < threshold) # True if student is still attentive
+
+
+
+def getIfStateChanged(attentive, studentID): # compares student's previous state to current attention status
+    if !(attentive == studentID("previous state"):
+        updateDB(attentive, studentID)
+
+
+
+def updateDB(attentive, studentID)
+
 
     #happinessScore = emotion_list[0]['scores']['happiness']
 
@@ -64,6 +76,7 @@ def getInattentive(emotion_list): # I think emotions is a dictionary?
 # if __name__ == '__main__':
 #     app.run()
 emotions = getEmotions()
-getInattentive(emotions)
+attentive = getInattentive(emotions)
+getIfStateChanged(attentive, studentID)
 
 # getInattentive(emotions) is this what we want??
