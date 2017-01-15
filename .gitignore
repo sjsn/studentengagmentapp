@@ -4,6 +4,7 @@ venv
 
 secrets.py
 
+
+secret.py
+
 __pycache__
-
-

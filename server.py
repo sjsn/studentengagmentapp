@@ -1,12 +1,12 @@
 from flask import Flask, render_template, request, jsonify
 import requests, json
-from secrets import emotions_key
+from secret import emotions_key
 
 app = Flask(__name__)
 
 ms_emotion_url = 'https://api.projectoxford.ai/emotion/v1.0/recognize'
 
-test_img = 'https://larrycuban.files.wordpress.com/2015/11/enhanced-buzz-wide-4644-1444018953-9.jpg'
+test_img = 'http://portra.wpshower.com/wp-content/uploads/2014/03/936full-angelina-jolie.jpg'
 
 @app.route('/api/question', methods=['GET'])
 def main():
@@ -24,16 +24,23 @@ def getEmotions():
     headers['Ocp-Apim-Subscription-Key'] = emotions_key
     headers['Content-Type'] = 'application/json'
     data = None
+    emotion_list = response.json()
     response = requests.request('POST', ms_emotion_url, json=params, data=None, headers=headers, params=None)
-    emotion_list = json.dumps(response.json(), sort_keys=True, indent=4, separators=(',', ':'))
+    pretty = json.dumps(response.json(), sort_keys=True, indent=4, separators=(',', ':'))
     print(emotion_list)
 
-def getInattentive(emotions):
+
+def getInattentive(emotion_list):
     # Get innattentive
-    return emotions
+    if emotion_list[0]['score']['neutral'] < 0.7:
+        print "You are innattentive"
+    return getEmotions
+
+
 
 
 # if __name__ == '__main__':
 #     app.run()
 
 getEmotions()
+getInattentive('neutral')
