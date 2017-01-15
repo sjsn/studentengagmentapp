@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import requests, json
+import time as _time
 from secret import emotions_key
 
 app = Flask(__name__)
@@ -17,6 +18,20 @@ def main():
         answer = get(query)
         result = {"query": query, "answer": answer}
     return jsonify(result)
+
+@app.route('/api/createClassroom', methods=['POST'])
+def createClassroom():
+    if request.form['teacherID'] is not None and request.form['students'] is not None:
+        createClassroom = 
+
+
+@app.route('/api/studentLogIn', methods = ['POST'])
+def studentLogIn():
+
+
+@app.route('/api/teacherLogIn', method = ['POST'])
+def teacherLogIn():
+
 
 def getEmotions():
     params = {
@@ -46,6 +61,8 @@ def getInattentive(emotion_list): # I think emotions is a dictionary?
         print("You are attentive")
     else:
         print("You are inattentive")
+
+        return (result < threshold)
 
 
     #happinessScore = emotion_list[0]['scores']['happiness']
