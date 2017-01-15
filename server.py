@@ -30,19 +30,29 @@ def getEmotions():
     pretty = json.dumps(response.json(), sort_keys=True, indent=4, separators=(',', ':'))
     print(emotion_list)
     print (pretty)
-    print(emotion_list())
+
+    return emotion_list
 
 
 def getInattentive(emotions): # I think emotions is a dictionary?
     # Get innattentive
-    return emotions # not this
+
+    print("emotionlist type: ")
+    print type(emotion_list)
+
+    print("emotionlist(0) is: ")
+    print emotion_list[0]
 
 
+    happinessScore = emotion_list[0]['scores']['happiness']
+    #print("happinessScore")
+
+    #print type(happinessScore)
+
+    if happinessScore < 1:
+        print "You are innattentive"
 
 # if __name__ == '__main__':
 #     app.run()
-
-
-getEmotions()
-#emotions = getEmotions()
-# getInattentive(emotions) is this what we want??
+emotions = getEmotions()
+getInattentive(emotions)
