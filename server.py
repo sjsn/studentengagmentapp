@@ -22,15 +22,16 @@ def main():
 @app.route('/api/createClassroom', methods=['POST'])
 def createClassroom():
     if request.form['teacherID'] is not None and request.form['students'] is not None:
-        createClassroom =
+        createClassroom = request.form['classID']
+        numbers = get(classID)
+        result = {"classID": classID, "numbers": numbers}
+    return jsonify(numbers)       
 
+#@app.route('/api/studentLogIn', methods = ['POST'])
+#def studentLogIn():
 
-@app.route('/api/studentLogIn', methods = ['POST'])
-def studentLogIn():
-
-
-@app.route('/api/teacherLogIn', method = ['POST'])
-def teacherLogIn():
+#@app.route('/api/teacherLogIn', method = ['POST'])
+#def teacherLogIn():
 
 
 def getEmotions():
@@ -62,18 +63,7 @@ def getInattentive(emotion_list): # I think emotions is a dictionary?
     else:
         print("You are inattentive")
 
-        return (result < threshold) # True if student is still attentive
-
-
-
-def getIfStateChanged(attentive, studentID): # compares student's previous state to current attention status
-    if !(attentive == studentID("previous state"): # how do we find student's previous state from database???
-        updateDB(attentive, studentID)
-
-
-
-def updateDB(attentive, studentID)
-
+        return (result < threshold)
 
 
     #happinessScore = emotion_list[0]['scores']['happiness']
@@ -92,7 +82,6 @@ def updateDB(attentive, studentID)
 # if __name__ == '__main__':
 #     app.run()
 emotions = getEmotions()
-attentive = getInattentive(emotions)
-getIfStateChanged(attentive, studentID)
+getInattentive(emotions)
 
 # getInattentive(emotions) is this what we want??
