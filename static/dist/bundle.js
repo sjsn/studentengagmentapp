@@ -37689,6 +37689,10 @@
 
 	var _reactRouter = __webpack_require__(179);
 
+	var _jquery = __webpack_require__(237);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
 	var _secrets = __webpack_require__(243);
 
 	var _secrets2 = _interopRequireDefault(_secrets);
@@ -37709,7 +37713,7 @@
 
 	        var _this = _possibleConstructorReturn(this, (StudentView.__proto__ || Object.getPrototypeOf(StudentView)).call(this, props));
 
-	        _this.state = { img: "", "uid": _this.props.params.uid };
+	        _this.state = { img: "", uid: _this.props.params.uid, classId: _this.props.params.classId };
 	        document.body.style.backgroundImage = '';
 	        return _this;
 	    }
@@ -37737,16 +37741,25 @@
 	                canvas.height = vid.clientHeight;
 	                brush.drawImage(vid, 0, 0);
 	                canvas.toBlob(function (blob) {
-	                    var image = new Image();
-	                    image.src = blob;
-	                    var storeImg = firebase.storage().ref().child('images/' + _this2.state.uid).put(blob).then(function () {
+	                    var fileName = 'images/' + _this2.state.classId + _this2.state.uid;
+	                    var storeImg = firebase.storage().ref().child(fileName).put(blob).then(function () {
 	                        // Then gets the URL of that new image
-	                        return firebase.storage().ref().child("images/" + _this2.state.uid).getDownloadURL();
+	                        return firebase.storage().ref().child(fileName).getDownloadURL();
 	                    }).then(function (url) {
-	                        console.log(url);
+	                        _jquery2.default.ajax({
+	                            'url': '/api/analyze',
+	                            'method': 'POST',
+	                            'data': {
+	                                'img_url': url
+	                            }
+	                        }).then(function (result) {
+	                            console.log(result);
+	                        }).catch(function (err) {
+	                            console.log(err.error);
+	                        });
 	                    });
 	                });
-	            }, 10000);
+	            }, 6 * 1000);
 	        }
 	    }, {
 	        key: 'render',

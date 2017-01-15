@@ -14,35 +14,18 @@ test_img = 'https://larrycuban.files.wordpress.com/2015/11/enhanced-buzz-wide-46
 def main():
     return render_template('index.html')
 
-
-''' THIS STUFF IS USELESS APPARENTLY
-
-@app.route('/api/createClassroom', methods=['POST'])
-def createClassroom():
-    if request.form['teacherID'] is not None and request.form['students'] is not None:
-        createClassroom = request.form['classID']
-        numbers = getClassID()
-        result = {"classID": classID, "numbers": numbers}
-    return jsonify(result)
-
-@app.route('/api/studentLogIn', methods = ['POST'])
-def studentLogIn():
-
-@app.route('/api/teacherLogIn', method = ['POST'])
-def teacherLogIn():
-'''
-
 #@app.route('/api/teacherLogIn', method = ['POST'])
 #def teacherLogIn(): # pupulate database with array of student ids
 
-def getClassID(): # creates a unique class ID whenever it is called. Returns that ID as an integer
-    uniqueNumRaw = _time.time()
-    print("uniqueNumRaw: ", uniqueNumRaw)
-    uniqueNum = math.floor(10000*((uniqueNumRaw/10000)-math.floor(uniqueNumRaw/10000)))
-    return uniqueNum
+# def getClassID(): # creates a unique class ID whenever it is called. Returns that ID as an integer
+#     uniqueNumRaw = _time.time()
+#     print("uniqueNumRaw: ", uniqueNumRaw)
+#     uniqueNum = math.floor(10000*((uniqueNumRaw/10000)-math.floor(uniqueNumRaw/10000)))
+#     return uniqueNum
 
 
 # NO CLUE WHY getClassEngagement DOESN'T WORK
+
 def getClassEngagement(students): # takes a list of students and returns a message indicating whether or not the class is engaged
     threshold = .5 # idk
     stateIndex = 3 # index containing student's state (CHECK THIS WITH SAM)
@@ -57,28 +40,29 @@ def getClassEngagement(students): # takes a list of students and returns a messa
     disengaged = (percentDisengaged > threshold)
 
     if disengaged:
-        result = ({"teacher message text": "class is disengaged"})
+        result = {"teacherMessageText": "class is disengaged"}
     else:
-        result = ({"teacher message text": "class is engaged"})
+        result = {"teacherMessageText": "class is engaged"}
 
-    return jsonify(result)
+    print(result['teacherMessageText'])
 
-
+@app.route('/api/analyze', methods=['POST'])
 def getEmotions(): # determine the emotion scores, given an image of 1 person's face
-    params = {
-        "url": test_img
-    }
-    headers = {}
-    headers['Ocp-Apim-Subscription-Key'] = emotions_key
-    headers['Content-Type'] = 'application/json'
-    data = None
-    response = requests.request('POST', ms_emotion_url, json=params, data=None, headers=headers, params=None)
-    emotion_list = response.json()
-
-    #pretty = json.dumps(response.json(), sort_keys=True, indent=4, separators=(',', ':'))
-    #print (pretty)
-
-    return emotion_list
+    if request.form.get('img_url', type=str) is not None:
+        test_img = request.form.get('img_url', type=str)
+        params = {
+            "url": test_img
+        }
+        headers = {}
+        headers['Ocp-Apim-Subscription-Key'] = emotions_key
+        headers['Content-Type'] = 'application/json'
+        response = requests.request('POST', ms_emotion_url, json=params, data=None, headers=headers, params=None)
+        result = response.json()
+        print(params['url'])
+        print(result)
+        return jsonify(result)
+    else:
+        return jsonify({"error": 1})
 
 def getInattentive(emotion_list): # returns a boolean indicating innatention (True means student is disengaged)
     threshold = .7 # if negative emotions exceed this, student is disengaged
@@ -104,6 +88,6 @@ def getInattentive(emotion_list): # returns a boolean indicating innatention (Tr
         print("You are inattentive")
 
         return (result < threshold)
-      
+
 if __name__ == '__main__':
     app.run()
