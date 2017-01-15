@@ -6,16 +6,17 @@ import CreateClassForm from './CreateClassForm';
 export default class CreateClassPage extends React.Component {
     constructor(props) {
         super(props);
+        console.log("Create Class!");
         document.body.style.backgroundImage = '';
         var teacherId = this.props.params.uid;
-        this.state = {name: "", studentIds: [], teacher: teacherId};
+        this.state = {name: "", studentIds: [], teacherId: teacherId};
     }
 
     handleNameChange(value) {
         this.setState({name: value});
     }
 
-    handleStudentIds(value) {
+    handleStudentIdsChange(value) {
         this.setState({studentIds: value})
     }
 
@@ -25,10 +26,10 @@ export default class CreateClassPage extends React.Component {
             studentIds: this.state.studentIds,
             teacherId: this.state.teacherId
         }
-        firebase.database().ref().child('class/')
-        .push(data)
-        .then((newClass) => {
-            console.log(newClass);
+        var newRef = firebase.database().ref().child('class/').push(data)
+        .then((snapshot) => {
+            var classId = snapshot.key;
+            browserHistory.push('/teachers/' + this.state.teacherId + '/' + classId);
         });
     }
 

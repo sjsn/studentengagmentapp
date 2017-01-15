@@ -195,20 +195,17 @@
 	            { path: 'students', component: _StudentPage2.default, onEnter: requireAuth },
 	            _react2.default.createElement(
 	                _reactRouter.Route,
-	                { path: ':uid', component: _StudentList2.default, onEnter: requireAuth },
-	                _react2.default.createElement(_reactRouter.Route, { path: 'join', component: _JoinClassPage2.default, onEnter: requireAuth }),
-	                _react2.default.createElement(_reactRouter.Route, { path: ':classId', component: _StudentView2.default, onEnter: requireAuth })
+	                { path: ':uid', component: _StudentList2.default },
+	                _react2.default.createElement(_reactRouter.Route, { path: 'join', component: _JoinClassPage2.default }),
+	                _react2.default.createElement(_reactRouter.Route, { path: ':classId', component: _StudentView2.default })
 	            )
 	        ),
 	        _react2.default.createElement(
 	            _reactRouter.Route,
 	            { path: 'teachers', component: _TeacherPage2.default, onEnter: requireAuth },
-	            _react2.default.createElement(
-	                _reactRouter.Route,
-	                { path: ':uid', component: _TeacherList2.default, onEnter: requireAuth },
-	                _react2.default.createElement(_reactRouter.Route, { path: 'create', component: _CreateClassPage2.default, onEnter: requireAuth }),
-	                _react2.default.createElement(_reactRouter.Route, { path: ':classId', component: _TeacherView2.default, onEnter: requireAuth })
-	            )
+	            _react2.default.createElement(_reactRouter.Route, { path: ':uid/create', component: _CreateClassPage2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: ':uid', component: _TeacherList2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: ':uid/:classId', component: _TeacherView2.default })
 	        ),
 	        _react2.default.createElement(_reactRouter.Route, { path: '*', component: _NoMatch2.default })
 	    )
@@ -37720,57 +37717,30 @@
 
 	        var _this = _possibleConstructorReturn(this, (TeacherPage.__proto__ || Object.getPrototypeOf(TeacherPage)).call(this, props));
 
-	        console.log("teacher page");
 	        document.body.style.backgroundImage = '';
-	        _this.state = { uid: _this.params.uid };
-	        firebase.database().ref().child('user/' + _this.state.uid).once('value').then(function (result) {
-	            var teacherInfo = result.val();
-	            _this.setState({ teacher: teacherInfo });
-	        }).catch(function (error) {
-	            // Handle Errors here.
-	            var errorCode = error.code;
-	            var errorMessage = error.message;
-	            if (errorCode) {
-	                console.log(errorCode);
-	                console.log(errorMessage);
-	            }
-	        });
+	        _this.state = { uid: _this.props.params.uid,
+	            teacher: firebase.database().ref().child('user/' + _this.props.params.uid).once('value').then(function (result) {
+	                var teacherInfo = result.val();
+	                return _this.setState({ teacher: teacherInfo });
+	            }).catch(function (error) {
+	                // Handle Errors here.
+	                var errorCode = error.code;
+	                var errorMessage = error.message;
+	                if (errorCode) {
+	                    console.log(errorCode);
+	                    console.log(errorMessage);
+	                }
+	            })
+	        };
 	        return _this;
 	    }
 
 	    _createClass(TeacherPage, [{
-	        key: 'handleCreateClass',
-	        value: function handleCreateClass() {
-	            _reactRouter.browserHistory.push('/' + this.state.uid + '/create');
-	        }
-	    }, {
-	        key: 'handleJoinClass',
-	        value: function handleJoinClass() {
-	            _reactRouter.browserHistory.push('/' + this.state.uid + '/');
-	        }
-	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(
-	                    'button',
-	                    { className: 'btn btn-default', onClick: this.handleCreateClass.bind(this) },
-	                    'Create Class'
-	                ),
-	                _react2.default.createElement(
-	                    'button',
-	                    { className: 'btn btn-primary', onClick: this.handleJoinClass.bind(this) },
-	                    'Join Class'
-	                ),
-	                _react2.default.createElement(
-	                    'h1',
-	                    null,
-	                    'Hello, ',
-	                    this.state.teacher.fName,
-	                    '!'
-	                ),
 	                this.props.children
 	            );
 	        }
@@ -37797,6 +37767,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(179);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37808,22 +37780,107 @@
 	var TeacherList = function (_React$Component) {
 	    _inherits(TeacherList, _React$Component);
 
-	    function TeacherList() {
+	    function TeacherList(props) {
 	        _classCallCheck(this, TeacherList);
 
-	        return _possibleConstructorReturn(this, (TeacherList.__proto__ || Object.getPrototypeOf(TeacherList)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (TeacherList.__proto__ || Object.getPrototypeOf(TeacherList)).call(this, props));
+
+	        console.log(_this.props.params);
+	        _this.state = { uid: _this.props.params.uid,
+	            teacher: firebase.database().ref().child('user/' + _this.props.params.uid).once('value').then(function (result) {
+	                var teacherInfo = result.val();
+	                return _this.setState({ teacher: teacherInfo });
+	            }).catch(function (error) {
+	                // Handle Errors here.
+	                var errorCode = error.code;
+	                var errorMessage = error.message;
+	                if (errorCode) {
+	                    console.log(errorCode);
+	                    console.log(errorMessage);
+	                }
+	            }),
+	            classList: _react2.default.createElement(
+	                'p',
+	                null,
+	                'Loading...'
+	            )
+	        };
+	        return _this;
 	    }
 
 	    _createClass(TeacherList, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            firebase.database().ref().child('class').once('value').then(function (result) {
+	                var classes = Object.keys(result.val()).map(function (key, index) {
+	                    var curClass = result.val()[key];
+	                    if (curClass.teacherId === _this2.state.uid) {
+	                        return _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                _reactRouter.Link,
+	                                { to: '/teachers/' + _this2.state.uid + '/' + key },
+	                                _react2.default.createElement(
+	                                    'h1',
+	                                    null,
+	                                    curClass.name
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                'p',
+	                                null,
+	                                curClass.studentIds
+	                            )
+	                        );
+	                    }
+	                });
+	                return classes;
+	            }).then(function (result) {
+	                _this2.setState({ classList: result });
+	            }).catch(function (err) {
+	                console.log(err);
+	            });
+	        }
+	    }, {
+	        key: 'handleCreateClass',
+	        value: function handleCreateClass() {
+	            _reactRouter.browserHistory.push('/teachers/' + this.state.uid + '/create');
+	        }
+	    }, {
+	        key: 'handleJoinClass',
+	        value: function handleJoinClass() {
+	            _reactRouter.browserHistory.push('/teachers/' + this.state.uid + '/' + this.state.classId);
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
 	                'div',
 	                null,
 	                _react2.default.createElement(
-	                    'p',
+	                    'h1',
 	                    null,
-	                    'Teacher List'
+	                    'Hello, ',
+	                    this.state.teacher.fName,
+	                    '!'
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { className: 'btn btn-default', onClick: this.handleCreateClass.bind(this) },
+	                    'Create Class'
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { className: 'btn btn-primary', onClick: this.handleJoinClass.bind(this) },
+	                    'Join Class'
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    this.state.classList
 	                )
 	            );
 	        }
@@ -37850,6 +37907,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(179);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37861,16 +37920,69 @@
 	var TeacherView = function (_React$Component) {
 	    _inherits(TeacherView, _React$Component);
 
-	    function TeacherView() {
+	    function TeacherView(props) {
 	        _classCallCheck(this, TeacherView);
 
-	        return _possibleConstructorReturn(this, (TeacherView.__proto__ || Object.getPrototypeOf(TeacherView)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (TeacherView.__proto__ || Object.getPrototypeOf(TeacherView)).call(this, props));
+
+	        _this.state = { display: null };
+	        return _this;
 	    }
 
 	    _createClass(TeacherView, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this2 = this;
+
+	            firebase.database().ref().child('class/' + this.props.params.classId).once('value').then(function (result) {
+	                var classInfo = result.val();
+	                _this2.setState({
+	                    display: _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            'h1',
+	                            null,
+	                            classInfo.name
+	                        ),
+	                        _react2.default.createElement(
+	                            'p',
+	                            null,
+	                            classInfo.studentIds
+	                        )
+	                    )
+	                });
+	            }).catch(function (error) {
+	                // Handle Errors here.
+	                var errorCode = error.code;
+	                var errorMessage = error.message;
+	                if (errorCode) {
+	                    console.log(errorCode);
+	                    console.log(errorMessage);
+	                }
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
-	            return _react2.default.createElement('div', null);
+	            if (this.state.display != null) {
+	                console.log(this.state.display);
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    this.state.display
+	                );
+	            } else {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'Loading'
+	                    )
+	                );
+	            }
 	        }
 	    }]);
 
@@ -37917,9 +38029,10 @@
 
 	        var _this = _possibleConstructorReturn(this, (CreateClassPage.__proto__ || Object.getPrototypeOf(CreateClassPage)).call(this, props));
 
+	        console.log("Create Class!");
 	        document.body.style.backgroundImage = '';
 	        var teacherId = _this.props.params.uid;
-	        _this.state = { name: "", studentIds: [], teacher: teacherId };
+	        _this.state = { name: "", studentIds: [], teacherId: teacherId };
 	        return _this;
 	    }
 
@@ -37929,20 +38042,23 @@
 	            this.setState({ name: value });
 	        }
 	    }, {
-	        key: 'handleStudentIds',
-	        value: function handleStudentIds(value) {
+	        key: 'handleStudentIdsChange',
+	        value: function handleStudentIdsChange(value) {
 	            this.setState({ studentIds: value });
 	        }
 	    }, {
 	        key: 'handleSubmit',
 	        value: function handleSubmit() {
+	            var _this2 = this;
+
 	            var data = {
 	                name: this.state.name,
 	                studentIds: this.state.studentIds,
 	                teacherId: this.state.teacherId
 	            };
-	            firebase.database().ref().child('class/').push(data).then(function (newClass) {
-	                console.log(newClass);
+	            var newRef = firebase.database().ref().child('class/').push(data).then(function (snapshot) {
+	                var classId = snapshot.key;
+	                _reactRouter.browserHistory.push('/teachers/' + _this2.state.teacherId + '/' + classId);
 	            });
 	        }
 	    }, {
