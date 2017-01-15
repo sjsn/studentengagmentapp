@@ -8,8 +8,7 @@ app = Flask(__name__)
 
 ms_emotion_url = 'https://api.projectoxford.ai/emotion/v1.0/recognize'
 
-test_img = 'https://image.freepik.com/free-photo/three-bored-business-people-analyzing-graph_1262-2050.jpg'
-#'https://larrycuban.files.wordpress.com/2015/11/enhanced-buzz-wide-4644-1444018953-9.jpg'
+test_img = 'https://larrycuban.files.wordpress.com/2015/11/enhanced-buzz-wide-4644-1444018953-9.jpg'
 
 
 @app.route('/api/question', methods=['GET'])
@@ -41,24 +40,21 @@ def teacherLogIn():
 #@app.route('/api/teacherLogIn', method = ['POST'])
 #def teacherLogIn(): # pupulate database with array of student ids
 
-
-
-
-def getClassID():
+def getClassID(): # creates a unique class ID whenever it is called. Returns that ID as an integer
     uniqueNumRaw = _time.time()
     print("uniqueNumRaw: ", uniqueNumRaw)
     uniqueNum = math.floor(10000*((uniqueNumRaw/10000)-math.floor(uniqueNumRaw/10000)))
-    print("uniqueNum: ", uniqueNum)
+    return uniqueNum
 
 
-''' NO IDEA WHY THIS DOESN'T WORK
-def getClassEngagement(students):
+# NO CLUE WHY getClassEngagement DOESN'T WORK
+def getClassEngagement(students): # takes a list of students and returns a message indicating whether or not the class is engaged
     threshold = .5 # idk
     stateIndex = 3 # index containing student's state (CHECK THIS WITH SAM)
-    totalDisengagement = 0
+    totalDisengagement = 0 # initialize to zero
     numberOfStudents = len(students)
 
-    for student in students:
+    for student in students: # aggregate the attentiveness level of all student
         studentDisengagement = students[student][stateIndex]
         totalDisengagement += studentDisengagement
 
@@ -71,9 +67,9 @@ def getClassEngagement(students):
         result = ({"teacher message text": "class is engaged"})
 
     return jsonify(result)
-'''
 
-def getEmotions():
+
+def getEmotions(): # determine the emotion scores, given an image of 1 person's face
     params = {
         "url": test_img
     }
@@ -84,28 +80,28 @@ def getEmotions():
     response = requests.request('POST', ms_emotion_url, json=params, data=None, headers=headers, params=None)
     emotion_list = response.json()
 
-    pretty = json.dumps(response.json(), sort_keys=True, indent=4, separators=(',', ':'))
+    #pretty = json.dumps(response.json(), sort_keys=True, indent=4, separators=(',', ':'))
     #print (pretty)
 
     return emotion_list
 
 def getInattentive(emotion_list): # returns a boolean indicating innatention (True means student is disengaged)
-    threshold = .7 # negative emotion summation above this indicates innatention
+    threshold = .7 # if negative emotions exceed this, student is disengaged
     del emotion_list[0]['scores']["neutral"] # delete the "neutral" key-value pairing
     pretty = json.dumps(emotion_list, sort_keys=True, indent=4, separators=(',', ':'))
     print (pretty)
 
-    listTotal = 0
+    listTotal = 0 # initialize to zero for totaling
     negativeEmotionTotal = 0;
 
     for str in {"anger", "contempt", "disgust", "fear", "happiness", "sadness", "surprise"}: # add up the remaining values
         temp = emotion_list[0]['scores'][str]
         listTotal += temp # compute a new total
 
-        if str in {"anger", "contempt", "disgust", "fear", "sadness"}: # negative emotions are summed
+        if str in {"anger", "contempt", "disgust", "fear", "sadness"}: # negative emotions are also summed
             negativeEmotionTotal += emotion_list[0]['scores'][str]
 
-    result = negativeEmotionTotal / listTotal
+    result = negativeEmotionTotal / listTotal # student's disengagement level (higher numbers indicate increased disengagement)
 
     if (result < threshold):
         print("You are attentive")
@@ -113,18 +109,6 @@ def getInattentive(emotion_list): # returns a boolean indicating innatention (Tr
         print("You are inattentive")
 
         return (result < threshold)
-
-    #happinessScore = emotion_list[0]['scores']['happiness']
-
-    #print("happinessScore")
-
-    #print type(happinessScore)
-
-    #if happinessScore < 1:
-    #    print "You are innattentive"
-
-
-
 
 
 # if __name__ == '__main__':
