@@ -52,7 +52,7 @@ def getInattentive(emotion_list): # I think emotions is a dictionary?
 
 
 def getIfStateChanged(attentive, studentID): # compares student's previous state to current attention status
-    if !(attentive == studentID("previous state"):
+    if !(attentive == studentID("previous state"): # how do we find student's previous state from database???
         updateDB(attentive, studentID)
 
 
