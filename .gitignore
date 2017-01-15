@@ -4,7 +4,9 @@ venv
 
 secrets.py
 
-__pycache__
+*.pyc
+
+secret.py
 
 node_modules
 
