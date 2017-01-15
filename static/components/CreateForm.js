@@ -7,23 +7,23 @@ export default class CreateForm extends React.Component {
     }
 
     handleEmailChange(newEmail) {
-        this.props.onEmailChange(newEmail);
+        this.props.onEmailChange(newEmail.target.value);
     }
 
     handlePassChange(newPass) {
-        this.props.onPassChange(newPass);
+        this.props.onPassChange(newPass.target.value);
     }
 
     handleRoleChange(newRole) {
-        this.props.onRoleChange(newRole);
+        this.props.onRoleChange(newRole.target.value);
     }
 
     handleFNameChange(newFName) {
-        this.props.onFNameChange(newFName);
+        this.props.onFNameChange(newFName.target.value);
     }
 
     handleLNameChange(newLName) {
-        this.props.onLNameChange(newLName);
+        this.props.onLNameChange(newLName.target.value);
     }
 
     handleSubmit(form) {

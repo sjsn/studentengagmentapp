@@ -9,5 +9,6 @@ __pycache__
 node_modules
 
 bundle.js
+static/dist/bundle.js
 
 secrets.js

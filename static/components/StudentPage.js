@@ -5,10 +5,7 @@ import secrets from './secrets';
 export default class StudentPage extends React.Component {
     constructor(props) {
         super(props);
-        this.shouldComponentUpdate = ReactFireMixin.shouldComponentUpdate.bind(this);
         this.state = {img: ""};
-        var ref = firebase.database().ref("items");
-        this.bindAsArray(ref, "items");
     }
 
     componentWillMount() {

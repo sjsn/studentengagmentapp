@@ -1,8 +1,9 @@
 const db = firebase.database().ref("items");
-const user = firebase.auth().currentUser;
+const fbauth = firebase.auth();
 
 var auth = {
     isLoggedIn: () => {
+        var user = fbauth.currentUser
         if (user) {
             return true;
         } else {

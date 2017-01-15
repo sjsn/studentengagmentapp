@@ -50,7 +50,25 @@ export default class CreateUserPage extends React.Component {
             fName: this.state.fName,
             lName: this.state.lName
         };
-        console.log(data);
+        firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
+        .then((firebaseUser) => {
+            console.log(firebaseUser);
+            var uid = firebaseUser.uid;
+            var userData = {fName: data.fName, lName: data.lName};
+            var userRef = firebase.database().ref().child("users");
+            var curUserRef = userRef.child('user/' + uid);
+            curUserRef.set(userData);
+            console.log(curUserRef);
+        })
+        .catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            if (errorCode) {
+                console.log(errorCode);
+                console.log(errorMessage);
+            }
+        });
     }
 
     render() {

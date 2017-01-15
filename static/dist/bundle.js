@@ -111,11 +111,27 @@
 	    }
 
 	    _createClass(App, [{
+	        key: 'logout',
+	        value: function logout() {
+	            firebase.auth().signOut().then(function () {
+	                console.log("successfully signed out");
+	            }).catch(function (error) {
+	                // An error happened.
+	                console.log(error);
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var logout = _auth2.default.isLoggedIn() ? _react2.default.createElement(
+	                'button',
+	                { className: 'btn btn-danger', onClick: this.logout.bind(this) },
+	                'Log Out'
+	            ) : "";
 	            return _react2.default.createElement(
 	                'div',
 	                null,
+	                logout,
 	                this.props.children
 	            );
 	        }
@@ -26825,8 +26841,22 @@
 	    }, {
 	        key: 'handleSubmit',
 	        value: function handleSubmit() {
-	            console.log(this.state.email);
-	            console.log(this.state.password);
+	            var data = {
+	                email: this.state.email,
+	                password: this.state.password
+	            };
+	            firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function (res) {
+	                console.log(res);
+	                console.log("logged in!");
+	            }).catch(function (error) {
+	                // Handle Errors here.
+	                var errorCode = error.code;
+	                var errorMessage = error.message;
+	                if (errorCode) {
+	                    console.log(errorCode);
+	                    console.log(errorMessage);
+	                }
+	            });
 	        }
 	    }, {
 	        key: 'render',
@@ -26890,12 +26920,12 @@
 	    _createClass(LoginForm, [{
 	        key: 'handleEmailChange',
 	        value: function handleEmailChange(newEmail) {
-	            this.props.onEmailChange(newEmail);
+	            this.props.onEmailChange(newEmail.target.value);
 	        }
 	    }, {
 	        key: 'handlePassChange',
 	        value: function handlePassChange(newPass) {
-	            this.props.onPassChange(newPass);
+	            this.props.onPassChange(newPass.target.value);
 	        }
 	    }, {
 	        key: 'handleSubmit',
@@ -26921,7 +26951,7 @@
 	                            { htmlFor: 'email' },
 	                            'Email: '
 	                        ),
-	                        _react2.default.createElement('input', { type: 'text', placeholder: 'email', id: 'email', name: 'email', onChange: this.handleEmailChange.bind(this) }),
+	                        _react2.default.createElement('input', { type: 'email', placeholder: 'email', id: 'email', name: 'email', onChange: this.handleEmailChange.bind(this) }),
 	                        _react2.default.createElement('br', null),
 	                        _react2.default.createElement(
 	                            'label',
@@ -37271,7 +37301,23 @@
 	                fName: this.state.fName,
 	                lName: this.state.lName
 	            };
-	            console.log(data);
+	            firebase.auth().createUserWithEmailAndPassword(data.email, data.password).then(function (firebaseUser) {
+	                console.log(firebaseUser);
+	                var uid = firebaseUser.uid;
+	                var userData = { fName: data.fName, lName: data.lName };
+	                var userRef = firebase.database().ref().child("users");
+	                var curUserRef = userRef.child('user/' + uid);
+	                curUserRef.set(userData);
+	                console.log(curUserRef);
+	            }).catch(function (error) {
+	                // Handle Errors here.
+	                var errorCode = error.code;
+	                var errorMessage = error.message;
+	                if (errorCode) {
+	                    console.log(errorCode);
+	                    console.log(errorMessage);
+	                }
+	            });
 	        }
 	    }, {
 	        key: 'render',
@@ -37339,27 +37385,27 @@
 	    _createClass(CreateForm, [{
 	        key: 'handleEmailChange',
 	        value: function handleEmailChange(newEmail) {
-	            this.props.onEmailChange(newEmail);
+	            this.props.onEmailChange(newEmail.target.value);
 	        }
 	    }, {
 	        key: 'handlePassChange',
 	        value: function handlePassChange(newPass) {
-	            this.props.onPassChange(newPass);
+	            this.props.onPassChange(newPass.target.value);
 	        }
 	    }, {
 	        key: 'handleRoleChange',
 	        value: function handleRoleChange(newRole) {
-	            this.props.onRoleChange(newRole);
+	            this.props.onRoleChange(newRole.target.value);
 	        }
 	    }, {
 	        key: 'handleFNameChange',
 	        value: function handleFNameChange(newFName) {
-	            this.props.onFNameChange(newFName);
+	            this.props.onFNameChange(newFName.target.value);
 	        }
 	    }, {
 	        key: 'handleLNameChange',
 	        value: function handleLNameChange(newLName) {
-	            this.props.onLNameChange(newLName);
+	            this.props.onLNameChange(newLName.target.value);
 	        }
 	    }, {
 	        key: 'handleSubmit',
@@ -37423,7 +37469,7 @@
 	                            'Email: '
 	                        ),
 	                        _react2.default.createElement('br', null),
-	                        _react2.default.createElement('input', { type: 'text', placeholder: 'email', id: 'email', name: 'email', onChange: this.handleEmailChange.bind(this) }),
+	                        _react2.default.createElement('input', { type: 'email', placeholder: 'email', id: 'email', name: 'email', onChange: this.handleEmailChange.bind(this) }),
 	                        _react2.default.createElement('br', null),
 	                        _react2.default.createElement(
 	                            'label',
@@ -37494,10 +37540,7 @@
 
 	        var _this = _possibleConstructorReturn(this, (StudentPage.__proto__ || Object.getPrototypeOf(StudentPage)).call(this, props));
 
-	        _this.shouldComponentUpdate = ReactFireMixin.shouldComponentUpdate.bind(_this);
 	        _this.state = { img: "" };
-	        var ref = firebase.database().ref("items");
-	        _this.bindAsArray(ref, "items");
 	        return _this;
 	    }
 
@@ -37677,10 +37720,11 @@
 	    value: true
 	});
 	var db = firebase.database().ref("items");
-	var user = firebase.auth().currentUser;
+	var fbauth = firebase.auth();
 
 	var auth = {
 	    isLoggedIn: function isLoggedIn() {
+	        var user = fbauth.currentUser;
 	        if (user) {
 	            return true;
 	        } else {

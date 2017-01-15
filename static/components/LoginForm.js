@@ -7,11 +7,11 @@ export default class LoginForm extends React.Component {
     }
 
     handleEmailChange(newEmail) {
-        this.props.onEmailChange(newEmail);
+        this.props.onEmailChange(newEmail.target.value);
     }
 
     handlePassChange(newPass) {
-        this.props.onPassChange(newPass);
+        this.props.onPassChange(newPass.target.value);
     }
 
     handleSubmit(form) {

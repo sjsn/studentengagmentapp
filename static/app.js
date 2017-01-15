@@ -15,9 +15,22 @@ class App extends React.Component {
         super(props);
     }
 
+    logout() {
+        firebase.auth().signOut()
+        .then(() => {
+            console.log("successfully signed out");
+        })
+        .catch((error) => {
+            // An error happened.
+            console.log(error);
+        });
+    }
+
     render() {
+        var logout = auth.isLoggedIn() ? <button className="btn btn-danger" onClick={this.logout.bind(this)}>Log Out</button> : "";
         return (
             <div>
+                {logout}
                 {this.props.children}
             </div>
         );

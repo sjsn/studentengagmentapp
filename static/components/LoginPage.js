@@ -22,12 +22,28 @@ export default class LoginPage extends React.Component {
     handlePassChange(newPass) {
         this.setState({
             password: newPass
-        })
+        });
     }
 
     handleSubmit() {
-        console.log(this.state.email);
-        console.log(this.state.password);
+        var data = {
+            email: this.state.email,
+            password: this.state.password
+        };
+        firebase.auth().signInWithEmailAndPassword(data.email, data.password)
+        .then((res) => {
+            console.log(res);
+            console.log("logged in!");
+        })
+        .catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            if (errorCode) {
+                console.log(errorCode);
+                console.log(errorMessage);
+            }
+        });
     }
 
     render() {
