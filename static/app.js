@@ -65,10 +65,9 @@ ReactDOM.render((
             <Route path="login" component={LoginPage}/>
             <Route path="newuser" component={CreateUserPage}/>
             <Route path="students" component={StudentPage} onEnter={requireAuth}>
-                <Route path=":uid" component={StudentList}>
-                    <Route path="join" component={JoinClassPage}/>
-                    <Route path=":classId" component={StudentView}/>
-                </Route>
+                <Route path=":uid" component={StudentList}/>
+                <Route path=":uid/join" component={JoinClassPage}/>
+                <Route path=":uid/:classId" component={StudentView}/>
             </Route>
             <Route path="teachers" component={TeacherPage} onEnter={requireAuth}>
                 <Route path=":uid/create" component={CreateClassPage}/>

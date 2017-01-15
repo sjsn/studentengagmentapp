@@ -4,7 +4,6 @@ import { Link, browserHistory } from 'react-router';
 export default class TeacherList extends React.Component {
     constructor(props) {
         super(props);
-        console.log(this.props.params);
         this.state = {uid: this.props.params.uid,
             teacher: firebase.database().ref().child('user/' + this.props.params.uid).once('value')
                     .then((result) => {
@@ -32,7 +31,7 @@ export default class TeacherList extends React.Component {
                 if (curClass.teacherId === this.state.uid) {
                     return (
                         <div>
-                            <Link to={'/teachers/' + this.state.uid + '/' + key}><h1>{curClass.name}</h1></Link>
+                            <Link to={'/teachers/' + this.state.uid + '/' + key}><li>{curClass.name}</li></Link>
                             <p>{curClass.studentIds}</p>
                         </div>
                     );
@@ -41,7 +40,14 @@ export default class TeacherList extends React.Component {
             return classes;
         })
         .then((result) => {
-            this.setState({classList: result})
+            this.setState({classList:
+                <div>
+                    <h2>Your current classes:</h2>
+                    <ul>
+                        {result}
+                    </ul>
+                </div>
+            })
         })
         .catch((err) => {
             console.log(err);
