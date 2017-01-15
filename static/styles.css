@@ -55,5 +55,10 @@ body, html {
 }
 
 .hidden {
-    display: none;
+    position: absolute,
+    top: 0px;
+    right: 0px;
+    border: 1px solid black;
+    height: 200px;
+    width: 200px;
 }
