@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 ms_emotion_url = 'https://api.projectoxford.ai/emotion/v1.0/recognize'
 
-test_img = 'https://larrycuban.files.wordpress.com/2015/11/enhanced-buzz-wide-4644-1444018953-9.jpg'
+test_img = 'https://writechoice.files.wordpress.com/2012/03/lack-of-concentration.jpg'
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
@@ -49,26 +49,25 @@ def getClassEngagement(students): # takes a list of students and returns a messa
 @app.route('/api/analyze', methods=['POST'])
 def getEmotions(): # determine the emotion scores, given an image of 1 person's face
     if request.form.get('img_url', type=str) is not None:
-        test_img = request.form.get('img_url', type=str)
+        # test_img = request.form.get('img_url', type=str)
         params = {
-            "url": test_img
+            "url": test_img # using bullshit image. Not real one.
         }
         headers = {}
         headers['Ocp-Apim-Subscription-Key'] = emotions_key
         headers['Content-Type'] = 'application/json'
         response = requests.request('POST', ms_emotion_url, json=params, data=None, headers=headers, params=None)
         result = response.json()
-        print(params['url'])
-        print(result)
+        result = getInattentive(result);
         return jsonify(result)
     else:
         return jsonify({"error": 1})
 
 def getInattentive(emotion_list): # returns a boolean indicating innatention (True means student is disengaged)
     threshold = .7 # if negative emotions exceed this, student is disengaged
-    del emotion_list[0]['scores']["neutral"] # delete the "neutral" key-value pairing
+    if 'neutral' in emotion_list[0]['scores']:
+        del emotion_list[0]['scores']["neutral"] # delete the "neutral" key-value pairing
     pretty = json.dumps(emotion_list, sort_keys=True, indent=4, separators=(',', ':'))
-    print (pretty)
 
     listTotal = 0 # initialize to zero for totaling
     negativeEmotionTotal = 0;
@@ -87,7 +86,7 @@ def getInattentive(emotion_list): # returns a boolean indicating innatention (Tr
     else:
         print("You are inattentive")
 
-        return (result < threshold)
+    return (result < threshold)
 
 if __name__ == '__main__':
     app.run()

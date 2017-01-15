@@ -37735,41 +37735,367 @@
 	            }, function (err) {
 	                console.log(err);
 	            });
-	            // Retake picture every 1 minute & send to backend
+	            var url = "fake";
+	            var count = 0;
 	            setInterval(function () {
-	                canvas.width = vid.clientWidth;
-	                canvas.height = vid.clientHeight;
-	                brush.drawImage(vid, 0, 0);
-	                canvas.toBlob(function (blob) {
-	                    var fileName = 'images/' + _this2.state.classId + _this2.state.uid;
-	                    var storeImg = firebase.storage().ref().child(fileName).put(blob).then(function () {
-	                        // Then gets the URL of that new image
-	                        return firebase.storage().ref().child(fileName).getDownloadURL();
-	                    }).then(function (url) {
-	                        _jquery2.default.ajax({
-	                            'url': '/api/analyze',
-	                            'method': 'POST',
-	                            'data': {
-	                                'img_url': url
-	                            }
-	                        }).then(function (result) {
-	                            console.log(result);
-	                        }).catch(function (err) {
-	                            console.log(err.error);
-	                        });
-	                    });
+	                _jquery2.default.ajax({
+	                    'url': '/api/analyze',
+	                    'method': 'POST',
+	                    'data': {
+	                        'img_url': url
+	                    }
+	                }).then(function (result) {
+	                    count++;
+	                    console.log(count);
+	                    if (count == 5) {
+	                        _this2.setState({ hasQuestion: true, engagement: true });
+	                        result = true;
+	                        count = 0;
+	                    } else {
+	                        _this2.setState({ engagement: false });
+	                    }
+	                }).catch(function (err) {
+	                    console.log(err.error);
 	                });
-	            }, 6 * 1000);
+	            }, 2.5 * 1000, count);
+
+	            // // Retake picture every 1 minute & send to backend
+	            // setInterval(() => {
+	            // 	canvas.width = vid.clientWidth;
+	            // 	canvas.height = vid.clientHeight;
+	            // 	brush.drawImage(vid, 0, 0);
+	            //     canvas.toBlob((blob) => {
+	            //         const fileName = 'images/' + this.state.classId + this.state.uid;
+	            //         var storeImg = firebase.storage().ref().child(fileName)
+	            //         .put(blob)
+	            //         .then(() => {
+	            // 		    // Then gets the URL of that new image
+	            // 		    return firebase.storage().ref().child(fileName).getDownloadURL();
+	            // 		})
+	            //         .then((url) => {
+	            // 			$.ajax({
+	            //                 'url': '/api/analyze',
+	            //                 'method': 'POST',
+	            //                 'data': {
+	            //                     'img_url': url
+	            //                 }
+	            //             })
+	            //             .then((result) => {
+	            //                 console.log(result);
+	            //             })
+	            //             .catch((err) => {
+	            //                 console.log(err.error);
+	            //             })
+	            //         });
+	            //     });
+	            // }, 6*1000);
+	        }
+	    }, {
+	        key: 'handleSubmit',
+	        value: function handleSubmit(form) {
+	            form.preventDefault();
+	            console.log(this.state.attentionResp);
+	            this.setState({ engager: "", engagement: false, hasQuestion: false });
+	        }
+	    }, {
+	        key: 'handleChange',
+	        value: function handleChange(val) {
+	            this.setState({ attentionResp: val });
+	        }
+	    }, {
+	        key: 'handleBtnChange',
+	        value: function handleBtnChange(val) {
+	            this.setState({ answer: val });
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement('video', null),
-	                _react2.default.createElement('canvas', null)
-	            );
+	            if (this.state.engagement || this.state.hasQuestion) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'user-page-container' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'hidden' },
+	                            _react2.default.createElement('video', null),
+	                            _react2.default.createElement('canvas', null)
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'engager' },
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                'Lecture Checkin!'
+	                            ),
+	                            _react2.default.createElement(
+	                                'form',
+	                                { onSubmit: this.handleSubmit.bind(this) },
+	                                _react2.default.createElement('label', { htmlFor: 'attention' }),
+	                                _react2.default.createElement(
+	                                    'select',
+	                                    { id: 'attention', name: 'attention', onChange: this.handleChange.bind(this) },
+	                                    _react2.default.createElement(
+	                                        'option',
+	                                        { value: '1' },
+	                                        'I understand!'
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'option',
+	                                        { value: '2' },
+	                                        'I\'m a little confused.'
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'option',
+	                                        { value: '3' },
+	                                        'I\'m totally lost.'
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'option',
+	                                        { value: '4' },
+	                                        'My mind is on other things today.'
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    'button',
+	                                    { type: 'submit', className: 'btn btn-primary' },
+	                                    'Submit'
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'clicker' },
+	                            _react2.default.createElement(
+	                                'p',
+	                                null,
+	                                this.state.answer
+	                            ),
+	                            _react2.default.createElement(
+	                                'table',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'tr',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'a' },
+	                                            'a'
+	                                        )
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'b' },
+	                                            'b'
+	                                        )
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'c' },
+	                                            'c'
+	                                        )
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    'tr',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'd' },
+	                                            'd'
+	                                        )
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'e' },
+	                                            'e'
+	                                        )
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'f' },
+	                                            'f'
+	                                        )
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    'tr',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'g' },
+	                                            'g'
+	                                        )
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'h' },
+	                                            'h'
+	                                        )
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'i' },
+	                                            'i'
+	                                        )
+	                                    )
+	                                )
+	                            )
+	                        )
+	                    )
+	                );
+	            } else {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'user-page-container' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'hidden' },
+	                            _react2.default.createElement('video', null),
+	                            _react2.default.createElement('canvas', null)
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'clicker' },
+	                            _react2.default.createElement(
+	                                'p',
+	                                null,
+	                                this.state.answer || "N/A"
+	                            ),
+	                            _react2.default.createElement(
+	                                'table',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'tr',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'a' },
+	                                            'a'
+	                                        )
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'b' },
+	                                            'b'
+	                                        )
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'c' },
+	                                            'c'
+	                                        )
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    'tr',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'd' },
+	                                            'd'
+	                                        )
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'e' },
+	                                            'e'
+	                                        )
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'f' },
+	                                            'f'
+	                                        )
+	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    'tr',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'g' },
+	                                            'g'
+	                                        )
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'h' },
+	                                            'h'
+	                                        )
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        _react2.default.createElement(
+	                                            'button',
+	                                            { onClick: this.handleBtnChange.bind(this), value: 'i' },
+	                                            'i'
+	                                        )
+	                                    )
+	                                )
+	                            )
+	                        )
+	                    )
+	                );
+	            }
 	        }
 	    }]);
 

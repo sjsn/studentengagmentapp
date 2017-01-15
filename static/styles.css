@@ -7,6 +7,13 @@ body, html {
     overflow-x: hidden;
 }
 
+video {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 200px;
+}
+
 .landing-page {
     height: 100%;
     width: 100%;
@@ -55,10 +62,16 @@ body, html {
 }
 
 .hidden {
-    position: absolute,
-    top: 0px;
-    right: 0px;
-    border: 1px solid black;
-    height: 200px;
-    width: 200px;
+    display: none;
+}
+
+.user-page-container {
+    padding-left: 40%;
+    padding-top: 100px;
+}
+
+.clicker button {
+    margin: 10px;
+    height: 50px;
+    width: 50px;
 }
