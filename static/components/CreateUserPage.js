@@ -56,7 +56,7 @@ export default class CreateUserPage extends React.Component {
             var personData = {fName: data.fName, lName: data.lName, teacher: isTeacher};
             var personRef = firebase.database().ref().child("user/" + uid);
             personRef.set(personData);
-            browserHistory.push('/' + data.role + 's');
+            browserHistory.push('/' + data.role + 's/' + uid);
         })
         .catch((error) => {
             // Handle Errors here.

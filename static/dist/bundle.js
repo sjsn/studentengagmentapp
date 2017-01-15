@@ -26712,12 +26712,12 @@
 	                    _react2.default.createElement(
 	                        'h1',
 	                        { className: 'main-title' },
-	                        'Welcome to [Insert App Name Here]!'
+	                        'Welcome to SEA!'
 	                    ),
 	                    _react2.default.createElement(
 	                        'p',
 	                        { className: 'desc' },
-	                        '[Insert App Name Here] uses your webcam to track student attentiveness and provides a clicker interface to keep students engaged. Using the webcam, we analyze if the students is actively paying attention. If we find that they are not, we send them gentle reminders to tune back in. If enough students are inattentive, we let the teacher know in order so they can regroup the class and keeps their students engaged.'
+	                        'SEA uses your webcam to track student attentiveness and provides a clicker interface to keep students engaged. Using the webcam, we analyze if the students is actively paying attention. If we find that they are not, we send them gentle reminders to tune back in. If enough students are inattentive, we let the teacher know in order so they can regroup the class and keeps their students engaged.'
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
@@ -26824,9 +26824,11 @@
 	            firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function () {
 	                return firebase.auth().currentUser.uid;
 	            }).then(function (uid) {
+	                console.log(uid);
 	                _this2.setState({ uid: uid });
 	                return firebase.database().ref().child('user/' + uid).once('value');
 	            }).then(function (result) {
+	                console.log(result.val());
 	                var teacher = result.val().teacher;
 	                var role = teacher ? 'teachers' : 'students';
 	                _reactRouter.browserHistory.push('/' + role + '/' + _this2.state.uid);
@@ -37288,7 +37290,7 @@
 	                var personData = { fName: data.fName, lName: data.lName, teacher: isTeacher };
 	                var personRef = firebase.database().ref().child("user/" + uid);
 	                personRef.set(personData);
-	                _reactRouter.browserHistory.push('/' + data.role + 's');
+	                _reactRouter.browserHistory.push('/' + data.role + 's/' + uid);
 	            }).catch(function (error) {
 	                // Handle Errors here.
 	                var errorCode = error.code;
@@ -37872,7 +37874,7 @@
 	                            _react2.default.createElement(
 	                                'p',
 	                                null,
-	                                this.state.answer
+	                                this.state.answer || "N/A"
 	                            ),
 	                            _react2.default.createElement(
 	                                'table',

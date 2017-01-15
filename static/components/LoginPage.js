@@ -33,10 +33,12 @@ export default class LoginPage extends React.Component {
             return firebase.auth().currentUser.uid;
         })
         .then((uid) => {
+            console.log(uid);
             this.setState({uid: uid});
             return firebase.database().ref().child('user/' + uid).once('value');
         })
         .then((result) => {
+            console.log(result.val());
             var teacher = result.val().teacher;
             var role = teacher ? 'teachers' : 'students';
             browserHistory.push('/' + role + '/' + this.state.uid);
