@@ -1,7 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
-
-import LandingButton from './LandingButton';
+import { Link, browserHistory } from 'react-router';
 
 export default class LandingPage extends React.Component {
     constructor(props) {
@@ -25,8 +23,7 @@ export default class LandingPage extends React.Component {
                         they can regroup the class and keeps their students engaged.
                     </p>
                     <div className="container login-btns">
-                        <Link to="/students"><LandingButton type="student" /></Link>
-                        <Link to="/teachers"><LandingButton type="teacher" /></Link>
+                        <Link to="/students"><button className="btn btn-default">Login</button></Link>
                     </div>
                 </div>
                 <div className="landing-footer">

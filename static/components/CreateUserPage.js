@@ -1,6 +1,7 @@
 import React from 'react';
 
 import CreateForm from './CreateForm';
+import { browserHistory } from 'react-router';
 
 export default class CreateUserPage extends React.Component {
     constructor(props) {
@@ -52,15 +53,14 @@ export default class CreateUserPage extends React.Component {
         };
         firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
         .then((firebaseUser) => {
-            console.log(firebaseUser);
             var uid = firebaseUser.uid;
-            var userData = {fName: data.fName, lName: data.lName};
-            var userRef = firebase.database().ref().child("users");
-            var curUserRef = userRef.child('user/' + uid);
-            curUserRef.set(userData);
-            console.log(curUserRef);
+            var isTeacher = data.role === "teacher";
+            var personData = {fName: data.fName, lName: data.lName, teacher: isTeacher};
+            var personRef = firebase.database().ref().child("user/" + uid);
+            personRef.set(personData);
+            browserHistory.push('/' + data.role + 's');
         })
-        .catch(function(error) {
+        .catch((error) => {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;

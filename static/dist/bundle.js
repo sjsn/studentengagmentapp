@@ -69,27 +69,27 @@
 
 	var _LandingPage2 = _interopRequireDefault(_LandingPage);
 
-	var _LoginPage = __webpack_require__(236);
+	var _LoginPage = __webpack_require__(235);
 
 	var _LoginPage2 = _interopRequireDefault(_LoginPage);
 
-	var _CreateUserPage = __webpack_require__(239);
+	var _CreateUserPage = __webpack_require__(238);
 
 	var _CreateUserPage2 = _interopRequireDefault(_CreateUserPage);
 
-	var _StudentPage = __webpack_require__(241);
+	var _StudentPage = __webpack_require__(240);
 
 	var _StudentPage2 = _interopRequireDefault(_StudentPage);
 
-	var _TeacherPage = __webpack_require__(243);
+	var _TeacherPage = __webpack_require__(242);
 
 	var _TeacherPage2 = _interopRequireDefault(_TeacherPage);
 
-	var _NoMatch = __webpack_require__(244);
+	var _NoMatch = __webpack_require__(243);
 
 	var _NoMatch2 = _interopRequireDefault(_NoMatch);
 
-	var _auth = __webpack_require__(245);
+	var _auth = __webpack_require__(244);
 
 	var _auth2 = _interopRequireDefault(_auth);
 
@@ -107,7 +107,19 @@
 	    function App(props) {
 	        _classCallCheck(this, App);
 
-	        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+	        _this.state = { logout: _react2.default.createElement(
+	                'button',
+	                { className: 'btn btn-danger', onClick: _this.logout.bind(_this) },
+	                'Log Out'
+	            ) };
+	        // if (auth.isLoggedIn()) {
+	        //     this.state = {logout: <button className="btn btn-danger" onClick={this.logout.bind(this)}>Log Out</button>};
+	        // } else {
+	        //     this.state = {logout: ""};
+	        // }
+	        return _this;
 	    }
 
 	    _createClass(App, [{
@@ -115,6 +127,7 @@
 	        value: function logout() {
 	            firebase.auth().signOut().then(function () {
 	                console.log("successfully signed out");
+	                _reactRouter.browserHistory.push('/');
 	            }).catch(function (error) {
 	                // An error happened.
 	                console.log(error);
@@ -123,15 +136,10 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var logout = _auth2.default.isLoggedIn() ? _react2.default.createElement(
-	                'button',
-	                { className: 'btn btn-danger', onClick: this.logout.bind(this) },
-	                'Log Out'
-	            ) : "";
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                logout,
+	                this.state.logout,
 	                this.props.children
 	            );
 	        }
@@ -26641,10 +26649,6 @@
 
 	var _reactRouter = __webpack_require__(179);
 
-	var _LandingButton = __webpack_require__(235);
-
-	var _LandingButton2 = _interopRequireDefault(_LandingButton);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -26692,12 +26696,11 @@
 	                        _react2.default.createElement(
 	                            _reactRouter.Link,
 	                            { to: '/students' },
-	                            _react2.default.createElement(_LandingButton2.default, { type: 'student' })
-	                        ),
-	                        _react2.default.createElement(
-	                            _reactRouter.Link,
-	                            { to: '/teachers' },
-	                            _react2.default.createElement(_LandingButton2.default, { type: 'teacher' })
+	                            _react2.default.createElement(
+	                                'button',
+	                                { className: 'btn btn-default' },
+	                                'Login'
+	                            )
 	                        )
 	                    )
 	                ),
@@ -26723,62 +26726,6 @@
 /* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var LandingButton = function (_React$Component) {
-	    _inherits(LandingButton, _React$Component);
-
-	    function LandingButton(props) {
-	        _classCallCheck(this, LandingButton);
-
-	        var _this = _possibleConstructorReturn(this, (LandingButton.__proto__ || Object.getPrototypeOf(LandingButton)).call(this, props));
-
-	        if (_this.props.type == "teacher") {
-	            _this.state = { text: "Sign in as Teacher" };
-	        } else {
-	            _this.state = { text: "Sign in as Student" };
-	        }
-	        return _this;
-	    }
-
-	    _createClass(LandingButton, [{
-	        key: "render",
-	        value: function render() {
-	            return _react2.default.createElement(
-	                "button",
-	                { className: "btn btn-default" },
-	                this.state.text
-	            );
-	        }
-	    }]);
-
-	    return LandingButton;
-	}(_react2.default.Component);
-
-	exports.default = LandingButton;
-
-/***/ },
-/* 236 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -26791,11 +26738,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _LoginForm = __webpack_require__(237);
+	var _reactRouter = __webpack_require__(179);
+
+	var _LoginForm = __webpack_require__(236);
 
 	var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
-	var _jquery = __webpack_require__(238);
+	var _jquery = __webpack_require__(237);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -26845,9 +26794,14 @@
 	                email: this.state.email,
 	                password: this.state.password
 	            };
-	            firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function (res) {
-	                console.log(res);
-	                console.log("logged in!");
+	            firebase.auth().signInWithEmailAndPassword(data.email, data.password).then(function () {
+	                return firebase.auth().currentUser.uid;
+	            }).then(function (uid) {
+	                return firebase.database().ref().child('user/' + uid).once('value');
+	            }).then(function (result) {
+	                var teacher = result.val().teacher;
+	                var role = teacher ? 'teachers' : 'students';
+	                _reactRouter.browserHistory.push('/' + role);
 	            }).catch(function (error) {
 	                // Handle Errors here.
 	                var errorCode = error.code;
@@ -26883,7 +26837,7 @@
 	exports.default = LoginPage;
 
 /***/ },
-/* 237 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26986,7 +26940,7 @@
 	exports.default = LoginForm;
 
 /***/ },
-/* 238 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -37212,7 +37166,7 @@
 
 
 /***/ },
-/* 239 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37227,9 +37181,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _CreateForm = __webpack_require__(240);
+	var _CreateForm = __webpack_require__(239);
 
 	var _CreateForm2 = _interopRequireDefault(_CreateForm);
+
+	var _reactRouter = __webpack_require__(179);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -37302,13 +37258,12 @@
 	                lName: this.state.lName
 	            };
 	            firebase.auth().createUserWithEmailAndPassword(data.email, data.password).then(function (firebaseUser) {
-	                console.log(firebaseUser);
 	                var uid = firebaseUser.uid;
-	                var userData = { fName: data.fName, lName: data.lName };
-	                var userRef = firebase.database().ref().child("users");
-	                var curUserRef = userRef.child('user/' + uid);
-	                curUserRef.set(userData);
-	                console.log(curUserRef);
+	                var isTeacher = data.role === "teacher";
+	                var personData = { fName: data.fName, lName: data.lName, teacher: isTeacher };
+	                var personRef = firebase.database().ref().child("user/" + uid);
+	                personRef.set(personData);
+	                _reactRouter.browserHistory.push('/' + data.role + 's');
 	            }).catch(function (error) {
 	                // Handle Errors here.
 	                var errorCode = error.code;
@@ -37348,7 +37303,7 @@
 	exports.default = CreateUserPage;
 
 /***/ },
-/* 240 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37505,7 +37460,7 @@
 	exports.default = CreateForm;
 
 /***/ },
-/* 241 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37520,7 +37475,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _secrets = __webpack_require__(242);
+	var _reactRouter = __webpack_require__(179);
+
+	var _secrets = __webpack_require__(241);
 
 	var _secrets2 = _interopRequireDefault(_secrets);
 
@@ -37591,7 +37548,7 @@
 	exports.default = StudentPage;
 
 /***/ },
-/* 242 */
+/* 241 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -37608,7 +37565,7 @@
 	exports.default = secrets;
 
 /***/ },
-/* 243 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37622,6 +37579,8 @@
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(179);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -37662,7 +37621,7 @@
 	exports.default = TeacherPage;
 
 /***/ },
-/* 244 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37711,7 +37670,7 @@
 	exports.default = NoMatch;
 
 /***/ },
-/* 245 */
+/* 244 */
 /***/ function(module, exports) {
 
 	"use strict";

@@ -13,12 +13,19 @@ import auth from './components/auth';
 class App extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {logout: <button className="btn btn-danger" onClick={this.logout.bind(this)}>Log Out</button>};
+        // if (auth.isLoggedIn()) {
+        //     this.state = {logout: <button className="btn btn-danger" onClick={this.logout.bind(this)}>Log Out</button>};
+        // } else {
+        //     this.state = {logout: ""};
+        // }
     }
 
     logout() {
         firebase.auth().signOut()
         .then(() => {
             console.log("successfully signed out");
+            browserHistory.push('/');
         })
         .catch((error) => {
             // An error happened.
@@ -27,10 +34,9 @@ class App extends React.Component {
     }
 
     render() {
-        var logout = auth.isLoggedIn() ? <button className="btn btn-danger" onClick={this.logout.bind(this)}>Log Out</button> : "";
         return (
             <div>
-                {logout}
+                {this.state.logout}
                 {this.props.children}
             </div>
         );

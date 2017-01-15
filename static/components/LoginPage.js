@@ -1,4 +1,5 @@
 import React from 'react';
+import { browserHistory } from 'react-router';
 
 import LoginForm from './LoginForm';
 import $ from 'jquery';
@@ -31,9 +32,16 @@ export default class LoginPage extends React.Component {
             password: this.state.password
         };
         firebase.auth().signInWithEmailAndPassword(data.email, data.password)
-        .then((res) => {
-            console.log(res);
-            console.log("logged in!");
+        .then(() => {
+            return firebase.auth().currentUser.uid;
+        })
+        .then((uid) => {
+            return firebase.database().ref().child('user/' + uid).once('value');
+        })
+        .then((result) => {
+            var teacher = result.val().teacher;
+            var role = teacher ? 'teachers' : 'students';
+            browserHistory.push('/' + role);
         })
         .catch(function(error) {
             // Handle Errors here.
